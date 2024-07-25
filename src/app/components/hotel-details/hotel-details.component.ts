@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-hotel-details',
@@ -11,8 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class HotelDetailsComponent implements OnInit {
   hotel: any;
   currentImage: string = '';
-  reservationForm: FormGroup;
-  showPaymentForm = false;
+  isReservationModalOpen = false;
 
   hotelServices = [
     { icon: 'icon-fitness-center', text: 'Centro de fitness 24 horas con equipo de cardio y pesas.' },
@@ -45,67 +42,30 @@ export class HotelDetailsComponent implements OnInit {
     { icon: 'icon-room-service', text: 'Servicio de habitaciones disponible.' }
   ];
 
-  constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private http: HttpClient
-  ) {
+  constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
     this.hotel = navigation?.extras?.state?.['hotel'] || null;
     if (this.hotel && this.hotel.images && this.hotel.images.length > 0) {
       this.currentImage = this.hotel.images[0];
     }
-
-    this.reservationForm = this.fb.group({
-      checkin: ['', Validators.required],
-      checkout: ['', Validators.required],
-      numRooms: ['', [Validators.required, Validators.min(1)]],
-      roomType: ['', Validators.required],
-      adults: ['', [Validators.required, Validators.min(1)]],
-      children: [0, Validators.min(0)],
-      terms: [false, Validators.requiredTrue],
-      paymentMethod: ['', Validators.required],
-      cardNumber: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
-      expiryDate: ['', Validators.required],
-      cvv: ['', [Validators.required, Validators.pattern('^[0-9]{3}$')]],
-      cardName: ['', Validators.required]
-    });
   }
 
-  ngOnInit(): void {
-    // Puedes agregar lógica adicional aquí si es necesario
-  }
-
-  closeModal(): void {
-    this.router.navigate(['/manta']);
-  }
-
-  onBackdropClick(event: Event): void {
-    this.closeModal();
-  }
-
-  makeReservation(): void {
-    this.router.navigate(['/reservation-date'], { state: { images: this.hotel.images, currentImage: this.currentImage } });
-  }
+  ngOnInit(): void {}
 
   changeImage(image: string): void {
     this.currentImage = image;
   }
 
-  closePaymentModal(): void {
-    this.showPaymentForm = false; // Cerrar el modal de pago
+  openReservationModal(event: Event): void {
+    this.isReservationModalOpen = true;
+    event.stopPropagation();
   }
 
-  onSubmit(): void {
-    if (this.reservationForm.valid) {
-      const reservationData = this.reservationForm.value;
-      // Aquí puedes manejar el envío de datos o cualquier lógica adicional
-      console.log('Datos de la reserva:', reservationData);
 
-      // Restablecer el formulario o navegar a otra página si es necesario
-      this.reservationForm.reset();
-      this.showPaymentForm = false; // Opcional, según tu lógica
+  closeReservationModal(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
     }
+    this.isReservationModalOpen = false;
   }
 }
-

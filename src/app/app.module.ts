@@ -22,6 +22,8 @@ import { QuitoComponent } from './components/ciudades/quito/quito.component';
 import { SalinasComponent } from './components/ciudades/salinas/salinas.component';
 import { GuayaquilComponent } from './components/ciudades/guayaquil/guayaquil.component';
 import { HotelDetailsComponent } from './components/hotel-details/hotel-details.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { HotelDetailsComponent } from './components/hotel-details/hotel-details.
     QuitoComponent,
     SalinasComponent,
     GuayaquilComponent,
-    HotelDetailsComponent
+    HotelDetailsComponent,
+    ReservationComponent
   ],
 
   imports: [

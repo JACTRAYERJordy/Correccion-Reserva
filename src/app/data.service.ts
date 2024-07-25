@@ -1,3 +1,4 @@
+// data.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,12 +7,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DataService {
-  private registerURL = "http://localhost:3000/register"; //Registrar la cuenta (activo en register)
-  private loginURL = "http://localhost:3000/login"; //Login a la cuenta (activo en login)
-  private deleteAccountURL = "http://localhost:3000/delete-account";// Eliminación de la cuenta (activo en el hotel-booking)
-  private userDetailsURL = "http://localhost:3000/user-details"; //Ver mis datos (activo en hotel-booking)
-  private updateUserURL = "http://localhost:3000/update-user"; //Editar mis datos (activo en modal "VER MIS DATOS")
-  private logoutURL = "http://localhost:3000/logout"; // Cerrar sesión (activo en logout)
+  private registerURL = "http://localhost:3000/register";
+  private loginURL = "http://localhost:3000/login";
+  private deleteAccountURL = "http://localhost:3000/delete-account";
+  private userDetailsURL = "http://localhost:3000/user-details";
+  private updateUserURL = "http://localhost:3000/update-user";
+  private logoutURL = "http://localhost:3000/logout";
+  private reservationURL = "http://localhost:3000/reservations"; // Endpoint para reservas
 
   constructor(private http: HttpClient) { }
 
@@ -40,11 +42,9 @@ export class DataService {
   logout(): Observable<any> {
     return this.http.post(this.logoutURL, {});
   }
+
+  // Nuevo método para realizar una reserva
+  createReservation(reservationData: any): Observable<any> {
+    return this.http.post(this.reservationURL, reservationData);
+  }
 }
-
-
-/*getUser(email: string): Observable<any> {
-    return this.http.get(`${this.userURL}/${email}`);
-  }*/
-  //private userURL = "http://localhost:3000/user";// Ver la cuenta (activo en el hotel-booking)
-   //Editar la cuenta (activo dentro de "VER LA CUENTA")

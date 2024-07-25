@@ -2,12 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql2');
-const bcrypt = require('bcrypt'); //Esta es para el cifrado de contraseñas
+const bcrypt = require('bcrypt');
 
 const app = express();
 const port = 3000;
-
-
 
 // Configuraciones del CORS
 app.use(cors());
@@ -18,7 +16,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Jordy.2003',
+  password: 'Jordy.2003', // Cambia esto si tu contraseña es diferente
   database: 'formdata'
 });
 
@@ -81,7 +79,7 @@ app.post('/register', (req, res) => {
   });
 });
 
-// Endpoint para el "login" si es que el usaurio se ha registrado previamente
+// Endpoint para el "login"
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -106,8 +104,6 @@ app.post('/login', (req, res) => {
         res.status(500).json({ error: 'Error al comparar contraseñas' });
         return;
       }
-
-      // console.log('¿Las contraseñas coinciden?', isMatch);
 
       if (isMatch) {
         res.status(200).json({ message: 'Inicio de sesión exitoso' });
@@ -186,6 +182,21 @@ app.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Sesión cerrada correctamente' });
 });
 
+// Ruta para manejar las reservas
+app.post('/reservations', (req, res) => {
+  const reservation = req.body;
+  const query = 'INSERT INTO reservations (checkin, checkout, numRooms, roomType, adults, children, terms) VALUES (?, ?, ?, ?, ?, ?, ?)';
+
+  db.query(query, [reservation.checkin, reservation.checkout, reservation.numRooms, reservation.roomType, reservation.adults, reservation.children, reservation.terms], (err, result) => {
+    if (err) {
+      console.error('Error al insertar reserva:', err);
+      res.status(500).send('Error al insertar reserva');
+      return;
+    }
+    res.status(200).send('Reserva creada correctamente');
+  });
+});
+
 // Ruta para la página principal
 app.get('/', (req, res) => {
   res.send('¡Bienvenido al servidor Node.js!');
@@ -201,4 +212,18 @@ app.listen(port, () => {
   console.log(`Servidor corriendo en: http://localhost:${port}`);
 });
 
+// Ruta para manejar las reservas
+app.post('/reservations', (req, res) => {
+  const reservation = req.body;
+  const query = 'INSERT INTO reservations (checkin, checkout, numRooms, roomType, adults, children, terms) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
+  db.query(query, [reservation.checkin, reservation.checkout, reservation.numRooms, reservation.roomType, reservation.adults, reservation.children, reservation.terms], (err, result) => {
+    if (err) {
+      console.error('Error al insertar reserva:', err);
+      res.status(500).send('Error al insertar reserva');
+      return;
+    }
+    res.status(200).send('Reserva creada correctamente');
+  });
+
+});
