@@ -1,0 +1,146 @@
+<!-- hotel-details.component.html -->
+<div class="container">
+  <div class="left-container">
+    <!-- Nombre del hotel -->
+    <div class="hotel-name">
+      <h2>{{ hotel.name }}</h2>
+    </div>
+
+    <!-- Mostrar imágenes existentes del hotel -->
+    <div class="images">
+      <!-- Imagen principal -->
+      <img *ngIf="hotel.images.length > 0" [src]="currentImage" [alt]="hotel.name" class="main-image">
+
+      <!-- Galería de miniaturas -->
+      <div class="thumbnail-gallery">
+        <img *ngFor="let image of hotel.images" [src]="image" [alt]="hotel.name"
+             class="thumbnail-image"
+             (click)="changeImage(image)">
+      </div>
+
+
+      <!-- Precio del hotel y botón de reservar -->
+      <div class="price-container">
+        <p class="price">{{ hotel.price }}</p>
+        <button class="reserve-button" (click)="makeReservation()">Reservar</button>
+      </div>
+    </div>
+    <div class="right-container">
+      <div class="services">
+        <h2>Servicios</h2>
+
+        <div class="service-category">
+          <h3>The Hotel</h3>
+          <div class="service-list">
+            <div *ngFor="let service of hotelServices">
+              <i class="icon" [ngClass]="service.icon"></i>
+              <span>{{ service.text }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-category">
+          <h3>The Room</h3>
+          <div class="service-list">
+            <div *ngFor="let service of roomServices">
+              <i class="icon" [ngClass]="service.icon"></i>
+              <span>{{ service.text }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-category">
+          <h3>The Food & Drink</h3>
+          <div class="service-list">
+            <div *ngFor="let service of foodServices">
+              <i class="icon" [ngClass]="service.icon"></i>
+              <span>{{ service.text }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="right-container">
+      <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+        <!-- En esta parte le pones los detalles de la reserva -->
+<div class="form-group">
+  <label for="checkin">Fecha de Llegada:</label>
+  <input type="date" id="checkin" class="form-control" formControlName="checkin" required>
+</div>
+
+<div class="form-group">
+  <label for="checkout">Fecha de Salida:</label>
+  <input type="date" id="checkout" class="form-control" formControlName="checkout" required>
+</div>
+
+<div class="form-group">
+  <label for="numRooms">Número de Habitaciones:</label>
+  <input type="number" id="numRooms" class="form-control" formControlName="numRooms" required>
+</div>
+
+<div class="form-group">
+  <label for="roomType">Tipo de Habitación:</label>
+  <select id="roomType" class="form-control" formControlName="roomType" required>
+    <option value="single">Individual</option>
+    <option value="double">Doble</option>
+    <option value="suite">Suite</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="adults">Número de Adultos:</label>
+  <input type="number" id="adults" class="form-control" formControlName="adults" required>
+</div>
+
+<div class="form-group">
+  <label for="children">Número de Niños:</label>
+  <input type="number" id="children" class="form-control" formControlName="children">
+</div>
+
+<!-- Aceptación de Términos y Condiciones -->
+<div class="form-check mb-3">
+  <input type="checkbox" class="form-check-input" id="terms" formControlName="terms" required>
+  <label class="form-check-label" for="terms">Acepto los términos y condiciones</label>
+</div>
+
+<button type="button" class="btn btn-primary" [disabled]="!reservationForm.valid || !reservationForm.get('terms')?.value" (click)="showPaymentForm = true">Pagar y Procesar Reserva</button>
+
+<div *ngIf="showPaymentForm" class="mt-4">
+  <!-- Información de Pago -->
+  <div class="form-group">
+    <label for="paymentMethod">Método de Pago:</label>
+    <select id="paymentMethod" class="form-control" formControlName="paymentMethod" required>
+      <option value="creditCard">Tarjeta de Crédito</option>
+      <option value="debitCard">Tarjeta de Débito</option>
+      <option value="paypal">PayPal</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="cardNumber">Número de Tarjeta:</label>
+    <input type="text" id="cardNumber" class="form-control" formControlName="cardNumber" required>
+  </div>
+
+  <div class="form-group">
+    <label for="expiryDate">Fecha de Vencimiento:</label>
+    <input type="month" id="expiryDate" class="form-control" formControlName="expiryDate" required>
+  </div>
+
+  <div class="form-group">
+    <label for="cvv">CVV:</label>
+    <input type="text" id="cvv" class="form-control" formControlName="cvv" required>
+  </div>
+
+  <div class="form-group">
+    <label for="cardName">Nombre en la Tarjeta:</label>
+    <input type="text" id="cardName" class="form-control" formControlName="cardName" required>
+  </div>
+
+  <button type="submit" class="btn btn-success" (click)="onSubmit()">Enviar</button>
+</div>
+
+      </form>
+  </div>
+  </div>
+
